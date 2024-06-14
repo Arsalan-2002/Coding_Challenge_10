@@ -1,20 +1,24 @@
-// example.js
 
-// Function to load and display purchase order data
 function loadAndDisplayData() {
-    d3.csv("data/purchase_orders.csv").then(data => {
-        // Select the UL element
+
+    d3.dsv(",", "purchase_orders.csv", function(d) {
+        return {
+            customerName: d.customerName,
+            orderId: d.orderId,
+            purchaseAmount: parseFloat(d.purchaseAmount)
+        };
+    }).then(data => {
+        
         const ul = d3.select("#purchase-orders");
 
-        // Create an LI element for each data entry
+        // Overhere I create an LI element for each data entry
         data.forEach(d => {
             ul.append("li")
-              .text(`${d.customerName} - Order ID: ${d.orderId} - Purchase Amount: $${d.purchaseAmount}`);
+              .text(`${d.customerName} - Order ID: ${d.orderId} - Purchase Amount: $${d.purchaseAmount.toFixed(2)}`);
         });
     }).catch(error => {
         console.error("Error loading the CSV file:", error);
     });
 }
 
-// Call the function to load and display data
 loadAndDisplayData();
